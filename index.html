@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .promecio {
+            padding: 10px;
+            background-color: blueviolet;
+            display: inline-block;
+            color: #FFF;
+            border-radius: 100% 100% 0% 0;
+            margin-bottom: -5px;
+        }
+
+        .promecio img {
+            border-radius: 100%;
+            width: 45px;
+            display: block;
+        }
+
+        .maquina {
+            padding: 10px;
+
+            width: 200px;
+            background-color: blueviolet;
+        }
+
+        .maquina button {
+            background-color: greenyellow;
+            border: 0;
+            padding: 5px 10px;
+
+            border-radius: 2px;
+        }
+
+        .nivel {
+            padding: 15px 20px;
+            background-color: rgb(146, 93, 196);
+            display: inline;
+            float: right;
+            border-radius: 50%;
+            color: #FFF;
+        }
+
+        .mercadoria {
+            display: flex;
+        }
+
+        .value {
+            padding: 5px 10px;
+            margin-top: 35px;
+            background-color: blueviolet;
+            color: #FFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="mercadoria">
+            <div class="promecio">
+                <!-- <span id="promecio-name">Promecios:</span><span id="value">0</span> -->
+                <img src="img/carvao.png" alt="">
+            </div>
+            <div class="value">1000</div>
+        </div>
+
+
+        <div>
+            <div class="maquina">
+                <button id="up">UP</button>
+                <div class="nivel" id="nivel">0</div>
+            </div>
+
+            <div class="maquina">
+                <button id="up-container">UP</button>
+                <div class="nivel" id="nivel-container">0</div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="jquery.js"></script>
+
+
+   <script>
+
+        const armazem = {
+            nivel: 0,
+            maximo: 500,
+            atual: 0,
+            preco: 250,
+            morNivel() {
+                if(this.preco < this.atual) {
+                    this.nivel += 1;
+                    this.calcMaximo();
+                    this.precoNivel();
+                }
+            },
+
+            precoNivel() {
+                this.atual += -(this.nivel * 250);
+                this.preco += (this.nivel * 250);
+            }
+            ,
+
+            getNivel() {
+                return this.nivel;
+            },
+
+            calcMaximo() {
+                this.maximo += this.nivel * 250;
+            },
+
+            getMaximo() {
+                return this.maximo;
+            },
+
+            getAtual() {
+                return this.atual;
+            }
+
+        }
+
+        const carvao = {
+            nome: "Carvão",
+            nivel: 0,
+            acrescimo: 5,
+            armazem: armazem,
+            preco: 100,
+            morNivel() {
+                if(this.preco < this.armazem.atual) {
+                    this.nivel += 1;
+                    this.calcAcrescimo();
+                    this.precoNivel();
+                }
+            },
+            precoNivel() {
+                this.armazem.atual += -(this.nivel * 100);
+                this.preco += (this.nivel * 100);
+            }
+            ,
+            calcAcrescimo() {
+                this.acrescimo += this.nivel * 10;
+            },
+            addMercas:function() {
+                if(this.armazem.atual < this.armazem.maximo) {
+                    this.armazem.atual += this.acrescimo;
+                } else {
+                    this.armazem.atual = this.armazem.maximo
+                }
+            }
+        }
+
+            
+
+        $('#up-container').click(function(){
+            carvao.armazem.morNivel();
+            $('#nivel-container').text(carvao.armazem.nivel)
+        })
+
+        console.log(carvao.armazem.nivel);
+
+        $('#up').click(function(){
+            carvao.morNivel();
+            $('#nivel').text(carvao.nivel);
+            
+        })
+
+
+            setInterval(function(){
+                carvao.addMercas();
+                $('.value').text(carvao.armazem.getAtual())
+                
+            },1000)
+
+        /*
+        setInterval(function() {
+            $('#value').text(currentValueContainer() + "/" + currentMaxValueContainer())
+        },100);
+
+        containerNivel()
+        */
+
+
+        /*
+        let teste = 1000;
+
+        acrecimos();
+        acrecimos();
+
+        function other(valu) {
+            teste = teste - valu;
+        }
+
+        function nextNivel(promecio, custo) {
+            if (promecio > custo) {
+                addNivel(remove);
+                acrecimos();
+            }
+        }
+
+        $('#up').click(function () {
+            nextNivel(current(), showCustoNivel())
+            $('#nivel').text(currentNivel());
+            console.log("Acrecimo por Segundo: " + showAcrecimo());
+            console.log("Custo Por Nivel: " + showCustoNivel())
+
+        });
+
+
+        setInterval(function () {
+            $('#value').text(current());
+        }, 100)
+        */
+        /*
+         console.log("Current: " + currentContainer);
+         console.log("Container Max: " + container);
+         containerNivel();
+         outrosConsumo(25);
+         console.log("Current: " + currentContainer);
+         console.log("Container Max: " + container);
+         */
+    </script>
+   
+    
+</body>
+
+</html>
